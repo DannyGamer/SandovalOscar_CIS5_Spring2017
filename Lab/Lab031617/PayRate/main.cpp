@@ -41,6 +41,7 @@ int main(int argc, char** argv) {
     
     //Output the transformed data
     cout<<"Your pay check is "<<payChck<<endl;
+            "200";
     
     //Exit stage right!
     return 0;
