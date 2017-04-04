@@ -25,7 +25,12 @@ const float RADERTH = 3959;          //Radius of the Earth in miles
 int main(int argc, char** argv) {
     //Declare variables
     float myWeight;   //Result in lbs
-    float myMass = 6; //Units of slugs
+    float myMass; //Units of slugs
+                
+    //Input Data
+    cout << "This program will calculate your weight in lbs." << endl;
+    cout << "Please input your mass in slugs:";
+    cin >> myMass;
    
     //Map inputs to outputs or process the data
     myWeight = GCONST * CNVFTCM * CNVFTCM * CNVFTCM * MSSEARTH * myMass 
