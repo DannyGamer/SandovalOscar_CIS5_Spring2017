@@ -20,7 +20,7 @@ using namespace std; //Name-space under which system libraries exist
 int main(int argc, char** argv) {
     //Declare variables
     int days;     //Number of days worked
-    float salary = 1;    //Salary per day
+    float salary = 0.5;    //Salary per day
     float edPriod = 0;  //Total salary at the end of the period
     int rate = 2;
     
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     if (days < 1)
     {
      cout << "Invalid number of days. Please input an integer greater than 1." << endl;
-     //return 1;
+     return 1;
     }
     
     cout << "\nDay     Salary" << endl;
