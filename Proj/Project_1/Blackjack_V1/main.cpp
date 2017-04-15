@@ -78,9 +78,9 @@ void hit(int delCard)
 	for (int i = 0; i < delCard; i++)
 	{
 		dealCard();
-		// NOTE: We wait 100 milliseconds because fast CPUs
+		// NOTE: We wait 500 milliseconds because fast CPUs
 		// give the same number inside random.
-		this_thread::sleep_for(chrono::milliseconds(200));
+		this_thread::sleep_for(chrono::milliseconds(500));
 	}
 }
 
