@@ -1,0 +1,122 @@
+/* 
+ * File:   main.cpp
+ * Author: Oscar Sandoval
+ * Created on April 17, 2017, 6:47 PM
+ * Purpose: Game of Blackjack Version 3
+ */
+
+//System Libraries
+//Input - Output Library
+//Needed to use strings
+//For rand and srand
+//Time for rand
+//Format the output
+
+//Name-space under which system libraries exist
+
+//User Libraries
+
+//Global Constants
+
+//Function Prototypes
+// Create menu for game
+// Function for player's turn
+// Deals cards to dealer and player and removes them from cards in deck
+// Sum for the value of all cards in your hand
+// Rules of Blackjack
+
+//Main -> Execution begins here
+//Array for each card name
+//Array for value of each card
+//Array for total number of each card value in deck
+//Array for player's hand
+//Array for dealer's hand
+
+//Declare variables
+//Input number to choose option menu
+//Total score of player based on his hand's total value
+//Total score of dealer based on his hand's total value
+//Input character to play again or not
+//Initialize to 0 each time program loops
+//Initialize to 0 each time program loops
+//Loops again as long as boolean is false
+//Counts the wins of the player
+//Counts the losses of the player
+
+//Loop will reset all of the card values in array for player and dealer back to zero at the start of each new game
+
+//Resets hand of player back to 0
+//Resets hand of dealer back to 0
+//Resets all cards of each value back to 4
+//Resets boolean back to false each time the program loops
+//Resets player's index each time program loops for array to start at the beginning
+//Resets dealer's index each time program loops for array to start at the beginning
+
+//Display the main menu
+//Choose an option
+
+//If chosen 1 at menu
+        //Game begins
+//Call player function to main
+
+----player Function----
+//Deal player's first two cards
+//Sum of player's hand returned from sum function will be assigned to pTotal
+//Ask player whether to hit or stand
+//Input 'h' to hit or 's' to stand
+//If chosen to hit 
+        //Another card will be dealt, new total will be summed
+        //If player's total is greater than 21, player loses, losses increase
+        //Else if player's total is equal to 21, player wins, wins increase
+//Else if chosen to stand
+        //Player will end his turn
+//Else 
+        //Display invalid option
+//Loop question as long as player chooses to hit
+//pTotal will be returned to main
+-------------------------------
+
+//If player's score is less than 21, the game continues to dealer's turn
+//Call dealer function to main
+
+----dealer Function----
+//Deal dealer's first two cards
+////Sum of dealer's hand returned from sum function will be assigned to dTotal
+//If total is less than 17, dealer has to hit.
+      //Deal another card, new total will be summed
+      //If total goes over 21, dealer loses, wins increase
+//Loop as long as total is less than 17
+//Else if total is greater than or equal to 17, dealer has to stand and end his turn
+//dTotal will be return to main
+----------------------------------
+
+
+//If player's score is less than 21, the game continues to dealer's turn
+     //Display the scores of the player and the dealer for comparison
+     //If dealer's score is greater than 21, player wins, wins increase
+     //If player's score is greater than dealer's score, and less than 21, player wins, wins increase
+     //Else if dealer's score is greater than player's score, and less than 21, player loses, losses increase
+     //Else if player's score is equal to dealer's score, player loses, losses increase
+//Else if player's score is greater than 21, player loses, losses increase
+//Else, player wins because score equals 21, wins increase
+
+//Ask player if he wants to play again
+//Input 'y' for yes and 'n' for no
+//If chosen no
+      //Exit the program
+      //Display statistics of game
+//Else if chosen yes
+      //Program will run again
+//Else
+      //Display invalid option
+//Loop question until a valid option is entered
+
+//If chosen 2 at menu
+      //Rules of Blackjack will be displayed
+//If chosen 3 at menu
+      //Exit the program
+//If chosen anything other than 1, 2, or 3
+      //Display Not a valid option
+//Loop menu as long as 3 is not chosen
+
+//Exit stage right!
