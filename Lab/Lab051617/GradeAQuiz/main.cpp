@@ -25,11 +25,21 @@ int score(int [], int);
 int main(int argc, char** argv) {
     //Declare Variables
     
-    //Input data
-    
-    //Process/Calculations Here
-    
-    //Output Located Here
+    //
+   char keyFnC[] = "key.dat"; 
+    char stuRFnC[] = "answer.dat"; 
+    scoreFn = "result.dat"; 
+
+    //Input data 
+    rdFile(keyFnC, key); 
+    rdFile(stuRFnC, stuResp); 
+
+    //Map inputs to outputs or process the data
+    grade(key, stuResp, scr); 
+
+    //Output the transformed data 
+    cout << "Your Test result score was = " << score(scr) << endl; 
+    wrtFile(scoreFn, scr); 
 
     //Exit
     return 0;

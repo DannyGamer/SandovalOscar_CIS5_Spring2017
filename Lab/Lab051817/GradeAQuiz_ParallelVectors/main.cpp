@@ -5,26 +5,25 @@
  * Purpose:  Sorting without array
  */
 
-//System Libraries Here
+//System Libraries
 #include <iostream>  //Input - Output Library
 #include <fstream>  //Reading/writing to files
 #include <vector>   //The STL Vector -> Dynamic Array
 using namespace std;
 
-//User Libraries Here
+//User Libraries
 
-//Global Constants Only, No Global Variables
-//Like PI, e, Gravity, or conversions
+//Global Constants
 
-//Function Prototypes Here
+//Function Prototypes
 void rdFile(char [], vector<char> &);   //Read the Answer Key and Student Responses
 void wrtFile(string, vector<int> &);          //Write the results
 void grade(vector<char> &, vector<char> &, vector<int> &); //Grade the file
 int score(vector<int> &);                    //Numerical result
 
-//Program Execution Begins Here
+//Program Execution Begins
 int main(int argc, char** argv) {
-    //Declare Variables
+    //Declare and initialize variables
     const int SIZE = 20;
     vector<char> key(SIZE);
     vector<char> stuResp(SIZE);
@@ -40,7 +39,7 @@ int main(int argc, char** argv) {
     rdFile(keyFnC, key); 
     rdFile(stuRFnC, stuResp); 
 
-    //Map inputs to outputs or process the data 
+    //Map inputs to outputs or process the data
     grade(key, stuResp, scr); 
 
     //Output the transformed data 

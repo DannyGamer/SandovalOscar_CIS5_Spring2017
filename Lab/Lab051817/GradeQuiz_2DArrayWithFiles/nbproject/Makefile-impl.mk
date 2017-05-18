@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=GradeQuiz
+PROJECTNAME=GradeQuiz_2DArrayWithFiles
 
 # Active Configuration
 DEFAULTCONF=Debug
