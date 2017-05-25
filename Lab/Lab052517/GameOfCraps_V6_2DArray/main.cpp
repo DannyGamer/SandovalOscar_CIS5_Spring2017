@@ -20,12 +20,13 @@ using namespace std; //Name-space under which system libraries exist
 
 //Global Constants
 const float PERCENT = 100.0f; //Conversion to Percent
+const int COLS = 2;
 
 //Function Prototypes
 char rollDie(int);                                               //Roll the Dice prototype
-void fileDsp(ofstream &, int [], int [], int, int, int, int);    //File Display
-void scrnDsp(int [], int [], int, int, int, int);                //Screen Display
-void crpGame(int [], int [], int, int &, int &, int &);          //Play Craps
+void fileDsp(ofstream &, int [][COLS], int, int, int, int);    //File Display
+void scrnDsp(int [][COLS], int, int, int, int);                //Screen Display
+void crpGame(int [][COLS], int, int &, int &, int &);          //Play Craps
 
 //Execution Begins Here
 int main(int argc, char** argv) {
@@ -40,8 +41,7 @@ int main(int argc, char** argv) {
     int numThrw = 0;  //Throw statistics
     int lmGames = 100000000; //Game limiter
     const int SIZE = 13;     //Size of our Arrays
-    int wins[SIZE] = {};    //Initializing the win array
-    int losses[SIZE] = {};  //Initializing the loss array
+    int winLose[SIZE][COLS] = {};    //Initializing the win array
     
     //Initialize variables
     string inName = "GameInfo.dat";   //String Name
@@ -53,17 +53,17 @@ int main(int argc, char** argv) {
     
     //Play the game the prescribed number of times
     int beg = time(0);   //Time the game play
-    crpGame(wins, losses, SIZE, nGames, numThrw, mxThrw);
+    crpGame(winLose, SIZE, nGames, numThrw, mxThrw);
     int end = time(0);   //End time of Game play
     
     
     //Output the game statistics to the screen
     cout << "Total time to play these Games in integer seconds = " << end-beg << endl;
-    scrnDsp(wins, losses, SIZE, nGames, numThrw, mxThrw);
+    scrnDsp(winLose, SIZE, nGames, numThrw, mxThrw);
     
     //Output the game statistics to a file
     out << "Total time to play these Games in integer seconds = " << end-beg << endl;
-    fileDsp(out, wins, losses, SIZE, nGames, numThrw, mxThrw);
+    fileDsp(out, winLose, SIZE, nGames, numThrw, mxThrw);
     
     //Close files
     in.close();
@@ -81,7 +81,7 @@ char rollDie(int sides)
     return sum1;
 }
 
-void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mxThrw)
+void scrnDsp(int winLose[][COLS], int SIZE, int nGames, int numThrw, int mxThrw)
 {
     //Output the transformed data
     cout << fixed << setprecision(2) << showpoint;
@@ -91,9 +91,9 @@ void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mx
     int sLosses = 0;
     for(int sum = 2; sum < SIZE; sum++)
     {
-        sWins += wins[sum];
-        sLosses += losses[sum];
-        cout << setw(4) << sum << setw(10) << wins[sum] << setw(10) << losses[sum] << endl;
+        sWins += winLose[sum][0];
+        sLosses += winLose[sum][1];
+        cout << setw(4) << sum << setw(10) << winLose[sum][0] << setw(10) << winLose[sum][1] << endl;
     }
     cout << "Total wins and losses = " << sWins + sLosses << endl;
     cout << "Percentage wins       = "
@@ -106,7 +106,7 @@ void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mx
     cout << "Ratio of Longest to shortest game = 10^" << log10(mxThrw) << endl;
 }
 
-void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int numThrw, int mxThrw)
+void fileDsp(ofstream &out, int winLose[][COLS], int SIZE, int nGames, int numThrw, int mxThrw)
 {
      //Output the transformed data
     out << fixed << setprecision(2) << showpoint;
@@ -116,9 +116,9 @@ void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int 
     int sLosses = 0;
     for(int sum = 2; sum < SIZE; sum++)
     {
-        sWins += wins[sum];
-        sLosses += losses[sum];
-        out << setw(4) << sum << setw(10) << wins[sum] << setw(10) << losses[sum] << endl;
+        sWins += winLose[sum][0];
+        sLosses += winLose[sum][1];
+        out << setw(4) << sum << setw(10) << winLose[sum][0] << setw(10) << winLose[sum][1] << endl;
     }
     out << "Total wins and losses = " << sWins + sLosses << endl;
     out << "Percentage wins       = "
@@ -131,7 +131,7 @@ void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int 
     out << "Ratio of Longest to shortest game = 10^" << log10(mxThrw) << endl;
 }
 
-void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int &mxThrw)
+void crpGame(int winLose[][COLS], int SIZE, int &nGames, int &numThrw, int &mxThrw)
 {
     for(int game = 1; game <= nGames; game++)
     {
@@ -143,10 +143,10 @@ void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int 
         switch(sum1)
         {
             case  7:
-            case 11: wins[sum1]++; break;
+            case 11: winLose[sum1][0]++; break;
             case  2:
             case  3:
-            case 12: losses[sum1]++; break;
+            case 12: winLose[sum1][1]++; break;
             default:{
                 //Loop until a 7 or previous sum is thrown
                 bool thrwAgn = true;
@@ -157,11 +157,11 @@ void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int 
                     gmThrw++;  //Increment the number of throws
                     if(sum2 == 7)
                     {
-                        losses[sum1]++;
+                        winLose[sum1][1]++;
                         thrwAgn = false;
                     }else if (sum1 == sum2)
                     {
-                        wins[sum1]++;
+                        winLose[sum1][0]++;
                         thrwAgn = false;
                     }
                 }while(thrwAgn); //do-while

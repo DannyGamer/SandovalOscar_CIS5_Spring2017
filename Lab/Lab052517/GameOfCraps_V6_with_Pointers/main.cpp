@@ -1,9 +1,9 @@
 /* 
  * File:   main.cpp
  * Author: Oscar Sandoval
- * Created on May 23rd, 2017, 11:38 AM
+ * Created on May 25th, 2017, 11:28 AM
  * Purpose:  Project 2 - Simulate a Craps Game
- *           Implement arrays
+ *           Implement arrays with pointers
  */
 
 //System Libraries
@@ -23,9 +23,9 @@ const float PERCENT = 100.0f; //Conversion to Percent
 
 //Function Prototypes
 char rollDie(int);                                               //Roll the Dice prototype
-void fileDsp(ofstream &, int [], int [], int, int, int, int);    //File Display
-void scrnDsp(int [], int [], int, int, int, int);                //Screen Display
-void crpGame(int [], int [], int, int &, int &, int &);          //Play Craps
+void fileDsp(ofstream &, int *, int *, int, int, int, int);    //File Display
+void scrnDsp(int *, int *, int, int, int, int);                //Screen Display
+void crpGame(int *, int *, int, int &, int &, int &);          //Play Craps
 
 //Execution Begins Here
 int main(int argc, char** argv) {
@@ -81,7 +81,7 @@ char rollDie(int sides)
     return sum1;
 }
 
-void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mxThrw)
+void scrnDsp(int *wins, int *losses, int SIZE, int nGames, int numThrw, int mxThrw)
 {
     //Output the transformed data
     cout << fixed << setprecision(2) << showpoint;
@@ -91,9 +91,9 @@ void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mx
     int sLosses = 0;
     for(int sum = 2; sum < SIZE; sum++)
     {
-        sWins += wins[sum];
-        sLosses += losses[sum];
-        cout << setw(4) << sum << setw(10) << wins[sum] << setw(10) << losses[sum] << endl;
+        sWins += *(wins + sum);
+        sLosses += *(losses + sum);
+        cout << setw(4) << sum << setw(10) << *(wins + sum) << setw(10) << *(losses + sum) << endl;
     }
     cout << "Total wins and losses = " << sWins + sLosses << endl;
     cout << "Percentage wins       = "
@@ -106,7 +106,7 @@ void scrnDsp(int wins[], int losses[], int SIZE, int nGames, int numThrw, int mx
     cout << "Ratio of Longest to shortest game = 10^" << log10(mxThrw) << endl;
 }
 
-void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int numThrw, int mxThrw)
+void fileDsp(ofstream &out, int *wins, int *losses, int SIZE, int nGames, int numThrw, int mxThrw)
 {
      //Output the transformed data
     out << fixed << setprecision(2) << showpoint;
@@ -116,9 +116,9 @@ void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int 
     int sLosses = 0;
     for(int sum = 2; sum < SIZE; sum++)
     {
-        sWins += wins[sum];
-        sLosses += losses[sum];
-        out << setw(4) << sum << setw(10) << wins[sum] << setw(10) << losses[sum] << endl;
+        sWins += *(wins + sum);
+        sLosses += *(losses + sum);
+        out << setw(4) << sum << setw(10) << *(wins + sum) << setw(10) << *(losses + sum) << endl;
     }
     out << "Total wins and losses = " << sWins + sLosses << endl;
     out << "Percentage wins       = "
@@ -131,7 +131,7 @@ void fileDsp(ofstream &out, int wins[], int losses[], int SIZE, int nGames, int 
     out << "Ratio of Longest to shortest game = 10^" << log10(mxThrw) << endl;
 }
 
-void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int &mxThrw)
+void crpGame(int *wins, int *losses, int SIZE, int &nGames, int &numThrw, int &mxThrw)
 {
     for(int game = 1; game <= nGames; game++)
     {
@@ -143,10 +143,10 @@ void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int 
         switch(sum1)
         {
             case  7:
-            case 11: wins[sum1]++; break;
+            case 11: (*(wins + sum1))++; break;
             case  2:
             case  3:
-            case 12: losses[sum1]++; break;
+            case 12: (*(losses + sum1))++; break;
             default:{
                 //Loop until a 7 or previous sum is thrown
                 bool thrwAgn = true;
@@ -157,16 +157,17 @@ void crpGame(int wins[], int losses[], int SIZE, int &nGames, int &numThrw, int 
                     gmThrw++;  //Increment the number of throws
                     if(sum2 == 7)
                     {
-                        losses[sum1]++;
+                        (*(losses + sum1))++;
                         thrwAgn = false;
                     }else if (sum1 == sum2)
                     {
-                        wins[sum1]++;
-                        thrwAgn = false;
+                        (*(wins + sum1))++;
+                        thrwAgn = false;//end of dependent if-else
                     }
-                }while(thrwAgn); //do-while
+                }while(thrwAgn); //end of do-while
             }    
-        }
+        }//end of switch
+        //Keep track of total throws and max throws
         numThrw += gmThrw;
         if(mxThrw < gmThrw)mxThrw = gmThrw; //Independent if
     }//end of for-loop
