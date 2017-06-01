@@ -13,6 +13,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>  //Format the output
+#include <fstream>
 
 using namespace std; //Name-space under which system libraries exist
 
@@ -35,7 +36,7 @@ int main(int argc, char** argv) {
                          "Eight", "Nine", "Ten", "Jack", "Queen", "King" };
 
     //Array for value of each card
-    short cardVal[13] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+    short cardVal[13] = { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
 
     //Array for total number of each card value in deck
     short cardTot[13] = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
@@ -56,6 +57,11 @@ int main(int argc, char** argv) {
     bool askAgn = false; //Loops again as long as boolean is false
     int win = 0; //Counts the wins of the player
     int loss = 0; //Counts the losses of the player
+    
+    ofstream out;
+    int money = 500;
+    char outName[]="GameStats.dat";
+    out.open(outName);
 
     do
     {
@@ -148,6 +154,20 @@ int main(int argc, char** argv) {
                                 (win + loss) * 100 << "%" << endl;
                         cout << "Percentage of games lost = " << static_cast<float>(loss) / 
                                 (win + loss) * 100 << "%" << endl;
+                        
+                        //Output the game statistics to file
+                        out << fixed << setprecision(1) << showpoint;
+                        out << "Stats for this game were:" << endl;
+                        out << "Total wins = " << win << endl;
+                        out << "Total losses = " << loss << endl;
+                        out << "Total games = " << win + loss << endl;
+                        out << "Percentage of games won = " << static_cast<float>(win) / 
+                                (win + loss) * 100 << "%" << endl;
+                        out << "Percentage of games lost = " << static_cast<float>(loss) / 
+                                (win + loss) * 100 << "%" << endl;
+
+                        out.close();
+    
                         exit(0);
                     }
                     else if (again == 'y' || again == 'Y') //If chosen to play, the program will run again
@@ -171,7 +191,7 @@ int main(int argc, char** argv) {
                 cout << "Not a valid option." << endl;
         }
     }while (choice != '3');
-
+    
     return 0;
 }
 
@@ -323,7 +343,16 @@ int sum(int* hand)
 
     for (int i = 0; i < 11; i++)
     {
-        total += hand[i]; //Adds the total amount of the value of all the cards in your hand
+        if(total += hand[i] > 21)
+        {
+            if(hand[i] == 11)
+            {
+                hand[i] -= 10;
+                total += hand[i];
+            }
+        }
+        else
+            total += hand[i]; //Adds the total amount of the value of all the cards in your hand
     }
     cout << "The total value of the cards is " << total << endl;
 
