@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     {
         //Loop will reset all of the card values in array for player 
         //and dealer back to zero at the start of each new game
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 12; i++)
         {
                 pHand[i] = 0;   //Resets hand of player back to 0
                 dHand[i] = 0;   //Resets hand of dealer back to 0
@@ -302,7 +302,7 @@ int givCard(short* cardTot, const string* cards, short* cardVal)
     do
     {
         //Gives out a random card
-        cIndex = rand() % 12;
+        cIndex = rand() % 13;
 
         //Removes the card from the deck.
         cardTot[cIndex] -= 1;

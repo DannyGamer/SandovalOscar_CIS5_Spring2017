@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
     {
         //Loop will reset all of the card values in array for player 
         //and dealer back to zero at the start of each new game
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 12; i++)
         {
                 pHand[i] = 0;   //Resets hand of player back to 0
                 dHand[i] = 0;   //Resets hand of dealer back to 0
@@ -119,8 +119,8 @@ int main(int argc, char** argv) {
                     }
                     else if (pScore == dScore)
                     {
-                        cout << "\nYou lose.\n\n" << endl;
-                        loss++;
+                        cout << "\nYou win.\n\n" << endl;
+                        win++;
                     }
                 }
                 //If player's score is greater than 21, the game ends with a loss for the player
@@ -132,8 +132,21 @@ int main(int argc, char** argv) {
                 //If player's score is equal to 21, player wins
                 else
                 {
-                    cout << "\nYou win\n\n" << endl;
-                    win++;
+                    if(pScore > dScore)
+                    {
+                        cout << "\nYou win\n\n" << endl;
+                        win++;
+                    }
+                    else if(pScore < dScore)
+                    {
+                        cout << "You lose\n\n" << endl;
+                        loss++;
+                    }
+                    else
+                    {
+                        cout << "You win\n\n" << endl;
+                        win++;
+                    }
                 }
 
                 do //Ask player whether to play again or not
@@ -343,16 +356,22 @@ int sum(int* hand)
 
     for (int i = 0; i < 11; i++)
     {
-        if(total += hand[i] > 21)
+        total += hand[i];
+        if(total > 21)
         {
             if(hand[i] == 11)
             {
                 hand[i] -= 10;
+                i++;
+                
+                if(hand[i] == 11 && total > 21)
+                {
+                    hand[i] -= 10;
+                }
+                
                 total += hand[i];
             }
         }
-        else
-            total += hand[i]; //Adds the total amount of the value of all the cards in your hand
     }
     cout << "The total value of the cards is " << total << endl;
 
@@ -362,36 +381,27 @@ int sum(int* hand)
 // Rules of Blackjack
 void rules()
 {
-//    cout << "\n\nThe rules of this game are as follows:" << endl << endl;
-//    cout << "There are two players in this game, you and the dealer." << endl;
-//    cout << "Each player will initially get two cards from a deck of 52 "
-//            "cards. " << endl;
-//    cout << "After getting the cards, you will be given a choice to hit or "
-//            "stand." << endl;
-//    cout << "If chosen to hit, you will be given another card in addition to "
-//            "those you had." << endl;
-//    cout << "If chosen to stand, you will keep your current hand, and your "
-//            "turn will end." << endl;
-//    cout << "Each card has a value corresponding to the number that is shown "
-//            "on them.\nThe special face cards of Jack, Queen, and King, each have a "
-//            "value of 10, " << endl;
-//    cout << "whereas the Ace has a value of 1." << endl;
-//    cout << "The goal of the game is to see who can get the closest to "
-//            "the number 21, with any combination of cards you have. " << endl;
-//    cout << "However, if you were to pass the number 21 with the added value "
-//            "of all of your cards, you will lose the game." << endl;
-//    cout << "Whoever gets the closest to 21 without going over it, will win "
-//            "the game." << endl;
-//    cout << "In the occasion that both players get the same score in the end, "
-//            "the dealer wins the game.\n\n" << endl;
-    
-    
-    cout << "_____________________________________" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl;
-    cout << "|__|__|__|__|__|__|__|__|__|__|__|__|" << endl << endl << endl;
+    cout << "\n\nThe rules of this game are as follows:" << endl << endl;
+    cout << "There are two players in this game, you and the dealer." << endl;
+    cout << "Each player will initially get two cards from a deck of 52 "
+            "cards. " << endl;
+    cout << "After getting the cards, you will be given a choice to hit or "
+            "stand." << endl;
+    cout << "If chosen to hit, you will be given another card in addition to "
+            "those you had." << endl;
+    cout << "If chosen to stand, you will keep your current hand, and your "
+            "turn will end." << endl;
+    cout << "Each card has a value corresponding to the number that is shown "
+            "on them.\nThe special face cards of Jack, Queen, and King, each have a "
+            "value of 10, " << endl;
+    cout << "whereas the Ace has a value of 1." << endl;
+    cout << "The goal of the game is to see who can get the closest to "
+            "the number 21, with any combination of cards you have. " << endl;
+    cout << "However, if you were to pass the number 21 with the added value "
+            "of all of your cards, you will lose the game." << endl;
+    cout << "Whoever gets the closest to 21 without going over it, will win "
+            "the game." << endl;
+    cout << "In the occasion that both players get the same score in the end, "
+            "the dealer wins the game.\n\n" << endl;
     
 }
