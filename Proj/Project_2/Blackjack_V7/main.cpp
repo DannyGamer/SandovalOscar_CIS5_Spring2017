@@ -1,8 +1,8 @@
 /* 
  * File:   main.cpp
  * Author: Oscar Sandoval
- * Created on June 2nd, 2017, 1:24 PM
- * Purpose: Game of Blackjack Version 5
+ * Created on June 3rd, 2017, 7:27 PM
+ * Purpose: Game of Blackjack Version 7
  */
 
 //System Libraries
@@ -13,16 +13,15 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>  //Format the output
-#include <fstream>
+#include <fstream>  //For I/O Files
 #include <vector>   //The STL Vector -> Dynamic Array
+#include <sstream>  //For parsing strings
 
 using namespace std; //Name-space under which system libraries exist
 
 //User Libraries
 
 //Global Constants
-//const int HAND_SIZE = 11;
-//const bool PHAS_ACES = false;
 
 //Function Prototypes
 void menu();
@@ -31,10 +30,12 @@ int dealer(vector<int> &, int, short*, const string*, short*);
 void givCard(short*, const string*, short*, vector<int> &, int&);
 int sum(vector<int> &);
 void rules();
-bool playAgain(int, int, bool, int&, int*);
+bool playAgain(int, int, bool, int&, int*, string*);
 void outputFile(int, int, int&);
+void outputScreen(int, int, int&);
 void compareScore(int, int, int&, int&, int&, int&);
-void readLeaderboard(int*, int);
+void lderBrd(int*, int, string*);
+void sortArray(int*, string*);
 
 //Execution begins here
 int main(int argc, char** argv) {
@@ -65,16 +66,20 @@ int main(int argc, char** argv) {
     int loss = 0; //Counts the losses of the player
     int money = 500;
     int gambled;
+    string input;
     
     //For leaderboard
-    int points[11];
+    int points[6];
+    string names[6];
     
     const int SIZE = 20;
     char name[SIZE];
     
     cout << "Enter your name: ";
-    cin.ignore();
+    //cin.ignore();
     cin.getline(name, SIZE);
+    
+    names[5] = name;
 
     do
     {
@@ -93,6 +98,7 @@ int main(int argc, char** argv) {
         pIndex = 0; //Resets player's index each time program loops for array to start at the beginning
         dIndex = 0; //Resets dealer's index each time program loops for array to start at the beginning
         
+        
         //Display the main menu
         menu();
 
@@ -103,14 +109,48 @@ int main(int argc, char** argv) {
         switch (choice)
         {
             case '1':
+                //Check to see if player meets minimum bet requirements. If not,
+                //player is not allowed to continue playing and game ends.
                 if (money < 5)
                 {
                     cout << "Insufficient funds. You cannot place the minimum bet." << endl;
-                    playAgain(win, loss, askAgn, money, points);
+                    cout << "\nGame Over" << endl << endl;
+                    //Output the game statistics to screen
+                    outputScreen(win, loss, money);
+
+                    // Call function to output statistics to file
+                    outputFile(win, loss, money);
+
+                    //Call function to make leaderboards
+                    lderBrd(points, money, names);
+
+                    exit(0);
                 }
-                cout << "\nYou have $" << money << ".\nChoose the amount of money "
-                        "you want to gamble \n(5, 10, 25, 50, 100, 250, 500)" << endl;
-                cin >> gambled;
+                
+                bool gamble;
+                //Ask player for amount of money to gamble
+                do
+                {
+                    gamble = false;
+                    cout << "\nYou have $" << money << ".\nChoose the amount of money "
+                            "you want to gamble \n(5, 10, 25, 50, 100, 250, 500):\n$";
+                    cin >> input;
+                    if(input != "5" && input != "10" && input != "25" && input != "50" &&
+                       input != "100" && input != "250" && input != "500")
+                    {
+                        cout << "Invalid input. Choose one of the available amounts." << endl;
+                        gamble = true;
+                    }
+                    gambled = atoi(input.c_str()); //Convert variable back into integer
+                    if(gambled > money)
+                    {
+                        cout << "You do not have enough funds to place this bet.\n"
+                                "Choose an amount that you can afford." << endl;
+                        gamble = true;
+                    }
+                } while(gamble);
+                
+                //gambled = atoi(input.c_str());
                 
                 //Total score of player's hand returned from player function will be assigned to pScore
                 pScore = player(pHand, pIndex, cardTot, cards, cardVal); 
@@ -139,7 +179,7 @@ int main(int argc, char** argv) {
                         win++;
                         money += gambled;
                 }
-                playAgain(win, loss, askAgn, money, points);
+                playAgain(win, loss, askAgn, money, points, names);
                 break;
             case '2':
                 rules(); //Display rules of Blackjack
@@ -360,7 +400,7 @@ void rules()
     
 }
 
-bool playAgain(int win, int loss, bool askAgn, int& money, int* points)
+bool playAgain(int win, int loss, bool askAgn, int& money, int* points, string* names)
 {
     do //Ask player whether to play again or not
     {
@@ -374,23 +414,13 @@ bool playAgain(int win, int loss, bool askAgn, int& money, int* points)
         if (again == 'n' || again == 'N') //If chosen not to play, the program will exit
         {
             //Output the game statistics to screen
-            cout << fixed << setprecision(1) << showpoint;
-            cout << "Exit the program." << endl << endl;
-            cout << "Statistics for this game are:" << endl;
-            cout << "Total wins = " << win << endl;
-            cout << "Total losses = " << loss << endl;
-            cout << "Total games = " << win + loss << endl;
-            cout << "Percentage of games won = " << static_cast<float>(win) / 
-                    (win + loss) * 100 << "%" << endl;
-            cout << "Percentage of games lost = " << static_cast<float>(loss) / 
-                    (win + loss) * 100 << "%" << endl;
-            cout << "Final score: $" << money << endl;
+            outputScreen(win, loss, money);
 
             // Call function to output statistics
             outputFile(win, loss, money);
             
             //Call function to make leaderboards
-            readLeaderboard(points, money);
+            lderBrd(points, money, names);
                     
             exit(0);
         }
@@ -425,6 +455,21 @@ void outputFile(int win, int loss, int& money)
     out << "Final Score: " << money << endl;
 
     out.close();
+}
+
+void outputScreen(int win, int loss, int& money)
+{
+    cout << fixed << setprecision(1) << showpoint;
+    cout << "Game Over" << endl << endl;
+    cout << "Statistics for this game are:" << endl;
+    cout << "Total wins = " << win << endl;
+    cout << "Total losses = " << loss << endl;
+    cout << "Total games = " << win + loss << endl;
+    cout << "Percentage of games won = " << static_cast<float>(win) / 
+            (win + loss) * 100 << "%" << endl;
+    cout << "Percentage of games lost = " << static_cast<float>(loss) / 
+            (win + loss) * 100 << "%" << endl;
+    cout << "Final score: $" << money << endl;
 }
 
 void compareScore(int pScore, int dScore, int& win, int& loss, int& money, int& gambled)
@@ -462,59 +507,87 @@ void compareScore(int pScore, int dScore, int& win, int& loss, int& money, int& 
     }
 }
 
-void readLeaderboard(int* points, int money)
+void lderBrd(int* points, int money, string* names)
 {
     //Declare and initialize leaderboards file
-    ifstream in;
     char scores[] = "Leaderboards.dat";
     int count = 0;
 
     //Open the file
-    in.open(scores);
+    //in.open(scores);
 
     //Read the values
-    while(in >> points[count++] && count < 10);
+    //while(in >> points[count++] && count < 5);
+    
+    string name;  //Save names temporarily into strings
+    string score; //Save scores temporarily into strings
+    string line;
+    ifstream in("Leaderboards.dat");
+
+    while(getline(in,line))   
+    {
+        stringstream iss(line);
+        getline(iss, name, ','); //Read names in file up to the comma and store in name
+        getline(iss, score);     //Read scores in file after comman and store in score
+        names[count] = name;     //Save names into names array
+        points[count] = atoi(score.c_str()); //Convert strings into integers and save to points array
+        count++; //Increase counter after each loop to completely fill arrays
+        //cout << "Name: " << name << " Score: " << score << endl; //Display names and scores
+    }
 
     //Close the file
     in.close();
     
-    points[11] = money;
+    //Assign player's score to last spot in array to be compared with previous scores
+    points[5] = money;
     
     //Call function to sort array for leaderboards
-    sortArray(points);
-    
+    sortArray(points, names);
     
     //Declare and initialize output file
     ofstream out;
-    char scores[] = "Leaderboards.dat";
-    int count = 0;
 
     //Open the file
     out.open(scores);
 
-    //Read the values
-    while(points[count++] >> out && count < 10);
+    cout << "\n\nLeaderboards:" << endl << endl;
+    //Write the names and scores to file and output the leaderboards to screen
+    for(int i = 0 ; i < 5; i++)
+    {
+        cout << "Name: " << setw(5)<< names[i] << "  Score: $" << points[i] << "\n";
+        out << "Name: " << setw(5)<< names[i] << "  Score: $" << points[i] << "\n";
+    }
 
     //Close the file
     out.close();
 }
 
 //Use bubble sort to sort array
-void sortArray(int* points)
+void sortArray(int* points, string* names)
 {
-    bool swap;
-    int temp;
+    bool swap; 
+    int temp; //Temporary variable needed to swap scores
+    string sTemp; //Temporary variable to swap names along with scores
     
     do
     {
-        swap = false;
-        for(int count = 0; count < 10; count++)
+        swap = false; //Set flag to break loop when everything is sorted
+        for(int count = 0; count < 5; count++)
         {
+            //Sort parallel arrays in order from largest to smallest score
             if(points[count] < points[count + 1])
             {
+                //Sort score array in order from largest to smallest
                 temp = points[count];
                 points[count] = points[count + 1];
                 points[count + 1] = temp;
+                
+                //Sort names of players along with their scores
+                sTemp = names[count];
+                names[count] = names[count + 1];
+                names[count + 1] = sTemp;
+                
+                //Will continue to loop until everything is sorted
                 swap = true;
             }
         }
