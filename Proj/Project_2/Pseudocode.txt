@@ -1,8 +1,8 @@
 /* 
  * File:   main.cpp
  * Author: Oscar Sandoval
- * Created on April 17, 2017, 6:47 PM
- * Purpose: Game of Blackjack Version 3
+ * Created on June 3rd, 2017, 7:27 PM
+ * Purpose: Game of Blackjack Version 7
  */
 
 //System Libraries
@@ -11,6 +11,9 @@
 //For rand and srand
 //Time for rand
 //Format the output
+//For I/O Files
+//The STL Vector -> Dynamic Array
+//For parsing strings
 
 //Name-space under which system libraries exist
 
@@ -19,104 +22,248 @@
 //Global Constants
 
 //Function Prototypes
+
+//Execution begins here
+
+    //Array for each card name
+
+    //Array for value of each card
+
+    //Array for total number of each card value in deck
+
+    //Array for player's hand
+
+    //Array for dealer's hand
+
+    //Declare variables
+
+    //Input number to choose option menu
+    //Total score of player based on his hand's total value
+    //Total score of dealer based on his hand's total value
+    //Initialize to 0 each time program loops
+    //Initialize to 0 each time program loops
+    //Loops again as long as boolean is false
+    //Counts the wins of the player
+    //Counts the losses of the player
+    //Money given to player to gamble
+    //Money player wants to gamble
+    //Choice input by user to gamble
+    //Number of rows in data array
+    //2-D Array used to print leaderboards
+    
+    //For leaderboard
+    
+    //Declare and initialize array for names
+    
+    //Ask user to enter his or her name and save to char array name
+    
+    //Enter player's name into last spot of string array names
+
+        //Loop will reset all of the card values in array for player 
+        //and dealer back to zero at the start of each new game
+
+            //Resets hand of player back to 0
+            //Resets hand of dealer back to 0
+        
+            //Resets all cards of each value back to 4
+
+        //Resets boolean back to false each time the program loops
+        //Resets player's index each time program loops for array to start at the beginning
+        //Resets dealer's index each time program loops for array to start at the beginning
+        
+        
+        //Display the main menu
+
+        //Choose an option
+        
+                //Check to see if player meets minimum bet requirements. If not,
+                //player is not allowed to continue playing and game ends.
+               
+                    //Output the game statistics to screen
+
+                    // Call function to output statistics to file
+
+                    //Call function to make leaderboards
+                    
+                //Ask player for amount of money to gamble
+   
+                    //Convert variable back into integer
+                
+                //Total score of player's hand returned from player function will be assigned to pScore
+                
+                //If player's score is less than 21, the game continues to dealer's turn
+ 
+                    //Total score of dealer's hand returned from dealer function will be assigned to dScore
+                    
+                    // Call function to compare player and dealer's scores
+                    
+                //If player's score is greater than 21, the game ends with a loss for the player
+            
+                //If player's score is equal to 21, player wins
+        
+                //Display rules of Blackjack
+------------------------------------------
 // Create menu for game
+      
+    //Option 1 plays the game
+    //Option 2 displays the rules of the game
+    //Option 3 exits the program
+------------------------------------------
 // Function for player's turn
+
+    //Set boolean statement to false to continue loop
+    //Total sum of player's cards' values
+    //Choose whether to hit or stand
+
+    //Deal the first two cards
+ 
+    //First card dealt will go into first space of array
+    //Second card dealt will go into second space of array
+
+    //Sum of player's hand returned from sum function will be assigned to pTotal
+
+        //Loop the question to hit or stand until player stands, 
+        //or wins or loses the game by hitting 21 or over 21
+
+            //Reset pTotal back to 0 to give correct sum each time a new card is dealt
+
+            //Player inputs choice
+
+            //If chosen to hit, another card will be dealt
+          
+                //Card will go into next space in array
+
+                //New sum will be calculated
+
+                //Check to see if player has won or lost the game, else continue asking to hit or stand.
+              
+                    //Player has lost. Break out of loop and display a loss
+                
+                //Loop will continue as long as player chooses to hit
+            
+	//If chosen to stand, player will end his turn
+
+                //Display sum of player's current hand
+                //Break out of question loop to continue the game
+            
+                //If option is invalid, continue to ask question until valid option is input
+
+        //Loop will continue as long as askAgain is true
+
+    //Returns player's total score back to main
+----------------------------------------
+// Function for dealer's turn
+
+    //Total sum of dealer's cards' values
+
+    //Deal the first two cards
+
+    //First card dealt will go into first space of array
+    //Second card dealt will go into second space of array
+
+    //Sum of dealer's hand returned from sum function will be assigned to dTotal
+
+        //If total is less than 17, dealer has to hit.
+        
+            //Reset dTotal back to 0 to give correct sum 
+
+        //If total is greater than or equal to 17, dealer has to stand.
+       
+    //Loop as long as score is less than 17
+    //Returns dealer's total score back to main
+---------------------------------------------------------
 // Deals cards to dealer and player and removes them from cards in deck
+
+    //Card index used to create random cards and assign a name and value to each
+    
+    // NOTE: We wait 1000 milliseconds because fast CPUs
+    // give the same number inside random.
+
+    //Set the random number seed.
+
+        //Gives out a random card
+        
+        //Removes the card from the deck.
+    
+    //Will continue to deal cards as long as there are still cards of that value
+---------------------------------------------
 // Sum for the value of all cards in your hand
+
+    //Returns sum of all cards in hand to dealer and player functions
+-----------------------------
 // Rules of Blackjack
+-----------------------------------------
+//Ask player whether to play again or not
 
-//Main -> Execution begins here
-//Array for each card name
-//Array for value of each card
-//Array for total number of each card value in deck
-//Array for player's hand
-//Array for dealer's hand
+        //Input character to play again or not
 
-//Declare variables
-//Input number to choose option menu
-//Total score of player based on his hand's total value
-//Total score of dealer based on his hand's total value
-//Input character to play again or not
-//Initialize to 0 each time program loops
-//Initialize to 0 each time program loops
-//Loops again as long as boolean is false
-//Counts the wins of the player
-//Counts the losses of the player
+        //If chosen not to play, the program will exit
+        
+            //Output the game statistics to screen
 
-//Loop will reset all of the card values in array for player and dealer back to zero at the start of each new game
+            // Call function to output statistics
+            
+            //Call function to make leaderboards
 
-//Resets hand of player back to 0
-//Resets hand of dealer back to 0
-//Resets all cards of each value back to 4
-//Resets boolean back to false each time the program loops
-//Resets player's index each time program loops for array to start at the beginning
-//Resets dealer's index each time program loops for array to start at the beginning
+        //If chosen to play, the program will run again
 
-//Display the main menu
-//Choose an option
+        //If option is invalid, question will continue to be asked
+------------------------------------------
+    //Declare and initialize output file
+    
+    //Output the game statistics to file
+--------------------------------------
+//Output Statistics to screen
+----------------
+//Compare player and dealer's scores
 
-//If chosen 1 at menu
-        //Game begins
-//Call player function to main
+    //Display the scores of the player and the dealer for comparison
 
-----player Function----
-//Deal player's first two cards
-//Sum of player's hand returned from sum function will be assigned to pTotal
-//Ask player whether to hit or stand
-//Input 'h' to hit or 's' to stand
-//If chosen to hit 
-        //Another card will be dealt, new total will be summed
-        //If player's total is greater than 21, player loses, losses increase
-        //Else if player's total is equal to 21, player wins, wins increase
-//Else if chosen to stand
-        //Player will end his turn
-//Else 
-        //Display invalid option
-//Loop question as long as player chooses to hit
-//pTotal will be returned to main
--------------------------------
+           //If dealer's score is greater than 21, player wins
 
-//If player's score is less than 21, the game continues to dealer's turn
-//Call dealer function to main
+    //Player's score must be greater than dealer's score to win
 
-----dealer Function----
-//Deal dealer's first two cards
-////Sum of dealer's hand returned from sum function will be assigned to dTotal
-//If total is less than 17, dealer has to hit.
-      //Deal another card, new total will be summed
-      //If total goes over 21, dealer loses, wins increase
-//Loop as long as total is less than 17
-//Else if total is greater than or equal to 17, dealer has to stand and end his turn
-//dTotal will be return to main
-----------------------------------
+    //If dealer's score is greater than player's score, and less than 21, player loses
 
+--------------------------------------------
+//Make Leaderboards
+    //Declare and initialize leaderboards file
+    
+    //Save names temporarily into strings
+    //Save scores temporarily into strings
 
-//If player's score is less than 21, the game continues to dealer's turn
-     //Display the scores of the player and the dealer for comparison
-     //If dealer's score is greater than 21, player wins, wins increase
-     //If player's score is greater than dealer's score, and less than 21, player wins, wins increase
-     //Else if dealer's score is greater than player's score, and less than 21, player loses, losses increase
-     //Else if player's score is equal to dealer's score, player loses, losses increase
-//Else if player's score is greater than 21, player loses, losses increase
-//Else, player wins because score equals 21, wins increase
+        //Read names in file up to the comma and store in name
+        //Read scores in file after comman and store in score
+        //Save names into names array
+        //Convert strings into integers and save to points array
+        //Increase counter after each loop to completely fill arrays
 
-//Ask player if he wants to play again
-//Input 'y' for yes and 'n' for no
-//If chosen no
-      //Exit the program
-      //Display statistics of game
-//Else if chosen yes
-      //Program will run again
-//Else
-      //Display invalid option
-//Loop question until a valid option is entered
+    //Close the file
+    
+    //Assign player's score to last spot in array to be compared with previous scores
+    
+    //Call function to sort array for leaderboards
+    
+    //Declare and initialize output file
 
-//If chosen 2 at menu
-      //Rules of Blackjack will be displayed
-//If chosen 3 at menu
-      //Exit the program
-//If chosen anything other than 1, 2, or 3
-      //Display Not a valid option
-//Loop menu as long as 3 is not chosen
+    //Open the file
 
-//Exit stage right!
+    //Write the names and scores to file and output the leaderboards to screen
+
+    //Close the file
+------------------------------------
+//Use bubble sort to sort array
+    //Temporary variable needed to swap scores
+    //Temporary variable to swap names along with scores
+
+         //Set flag to break loop when everything is sorted
+
+            //Sort parallel arrays in order from largest to smallest score
+
+                //Sort score array in order from largest to smallest
+                
+                //Sort names of players along with their scores
+                
+                //Will continue to loop until everything is sorted
+
+    //Convert integers to strings

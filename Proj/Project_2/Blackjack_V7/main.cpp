@@ -22,6 +22,7 @@ using namespace std; //Name-space under which system libraries exist
 //User Libraries
 
 //Global Constants
+const int COLS = 2;
 
 //Function Prototypes
 void menu();
@@ -30,12 +31,12 @@ int dealer(vector<int> &, int, short*, const string*, short*);
 void givCard(short*, const string*, short*, vector<int> &, int&);
 int sum(vector<int> &);
 void rules();
-bool playAgain(int, int, bool, int&, int*, string*);
-void outputFile(int, int, int&);
-void outputScreen(int, int, int&);
-void compareScore(int, int, int&, int&, int&, int&);
-void lderBrd(int*, int, string*);
-void sortArray(int*, string*);
+bool playAgn(int, int, bool, int&, int*, string*, string [][COLS], const int);
+void oFile(int, int, int&);
+void oScreen(int, int, int&);
+void comScor(int, int, int&, int&, int&, int&);
+void lderBrd(int*, int, string*, string [][COLS], const int);
+void srtAray(int*, string*, string [][COLS], const int);
 
 //Execution begins here
 int main(int argc, char** argv) {
@@ -64,21 +65,25 @@ int main(int argc, char** argv) {
     bool askAgn = false; //Loops again as long as boolean is false
     int win = 0; //Counts the wins of the player
     int loss = 0; //Counts the losses of the player
-    int money = 500;
-    int gambled;
-    string input;
+    int money = 500; //Money given to player to gamble
+    int gambled;     //Money player wants to gamble
+    string input;    //Choice input by user to gamble
+    const int ROW = 5; //Number of rows in data array
+    string data[ROW][COLS] = {}; //2-D Array used to print leaderboards
     
     //For leaderboard
-    int points[6];
+    int points[6]; //Array 
     string names[6];
     
+    //Declare and initialize array for 
     const int SIZE = 20;
     char name[SIZE];
     
+    //Ask user to enter his or her name and save to char array name
     cout << "Enter your name: ";
-    //cin.ignore();
     cin.getline(name, SIZE);
     
+    //Enter player's name into last spot of string array names
     names[5] = name;
 
     do
@@ -113,16 +118,15 @@ int main(int argc, char** argv) {
                 //player is not allowed to continue playing and game ends.
                 if (money < 5)
                 {
-                    cout << "Insufficient funds. You cannot place the minimum bet." << endl;
-                    cout << "\nGame Over" << endl << endl;
+                    cout << "\n\nInsufficient funds. You cannot place the minimum bet." << endl;
                     //Output the game statistics to screen
-                    outputScreen(win, loss, money);
+                    oScreen(win, loss, money);
 
                     // Call function to output statistics to file
-                    outputFile(win, loss, money);
+                    oFile(win, loss, money);
 
                     //Call function to make leaderboards
-                    lderBrd(points, money, names);
+                    lderBrd(points, money, names, data, ROW);
 
                     exit(0);
                 }
@@ -138,13 +142,13 @@ int main(int argc, char** argv) {
                     if(input != "5" && input != "10" && input != "25" && input != "50" &&
                        input != "100" && input != "250" && input != "500")
                     {
-                        cout << "Invalid input. Choose one of the available amounts." << endl;
+                        cout << "\nInvalid input. Choose one of the available amounts." << endl;
                         gamble = true;
                     }
                     gambled = atoi(input.c_str()); //Convert variable back into integer
                     if(gambled > money)
                     {
-                        cout << "You do not have enough funds to place this bet.\n"
+                        cout << "\nYou do not have enough funds to place this bet.\n"
                                 "Choose an amount that you can afford." << endl;
                         gamble = true;
                     }
@@ -162,7 +166,7 @@ int main(int argc, char** argv) {
                     dScore = dealer(dHand, dIndex, cardTot, cards, cardVal); 
                     
                     // Call function to compare player and dealer's scores
-                    compareScore(pScore, dScore, win, loss, money, gambled);
+                    comScor(pScore, dScore, win, loss, money, gambled);
                 }
                 //If player's score is greater than 21, the game ends with a loss for the player
                 else if (pScore > 21)
@@ -179,7 +183,7 @@ int main(int argc, char** argv) {
                         win++;
                         money += gambled;
                 }
-                playAgain(win, loss, askAgn, money, points, names);
+                playAgn(win, loss, askAgn, money, points, names, data, ROW);
                 break;
             case '2':
                 rules(); //Display rules of Blackjack
@@ -339,11 +343,9 @@ void givCard(short* cardTot, const string* cards, short* cardVal, vector<int> &h
     } while (cardTot[cIndex] == -1 || givOther == true);
     
     //Will continue to deal cards as long as there are still cards of that value
-    //if (cardTot[cIndex] > 0)
         cout << cards[cIndex] << " (" << cardVal[cIndex] << ")" << endl;
     
     hIndex++;
-//    return cardVal[cIndex]; //Returns the value of each card back to dealer and player functions
 }
 
 // Sum for the value of all cards in your hand
@@ -400,7 +402,7 @@ void rules()
     
 }
 
-bool playAgain(int win, int loss, bool askAgn, int& money, int* points, string* names)
+bool playAgn(int win, int loss, bool askAgn, int& money, int* points, string* names, string data[][COLS], const int ROW)
 {
     do //Ask player whether to play again or not
     {
@@ -414,13 +416,13 @@ bool playAgain(int win, int loss, bool askAgn, int& money, int* points, string* 
         if (again == 'n' || again == 'N') //If chosen not to play, the program will exit
         {
             //Output the game statistics to screen
-            outputScreen(win, loss, money);
+            oScreen(win, loss, money);
 
             // Call function to output statistics
-            outputFile(win, loss, money);
+            oFile(win, loss, money);
             
             //Call function to make leaderboards
-            lderBrd(points, money, names);
+            lderBrd(points, money, names, data, ROW);
                     
             exit(0);
         }
@@ -435,7 +437,7 @@ bool playAgain(int win, int loss, bool askAgn, int& money, int* points, string* 
     return askAgn;
 }
 
-void outputFile(int win, int loss, int& money)
+void oFile(int win, int loss, int& money)
 {
     //Declare and initialize output file
     ofstream out;
@@ -444,7 +446,7 @@ void outputFile(int win, int loss, int& money)
     
     //Output the game statistics to file
     out << fixed << setprecision(1) << showpoint;
-    out << "Stats for this game are:" << endl;
+    out << "Statistics for last game were:" << endl << endl;
     out << "Total wins = " << win << endl;
     out << "Total losses = " << loss << endl;
     out << "Total games = " << win + loss << endl;
@@ -452,16 +454,16 @@ void outputFile(int win, int loss, int& money)
             (win + loss) * 100 << "%" << endl;
     out << "Percentage of games lost = " << static_cast<float>(loss) / 
             (win + loss) * 100 << "%" << endl;
-    out << "Final Score: " << money << endl;
+    out << "Final Score: S" << money << endl;
 
     out.close();
 }
 
-void outputScreen(int win, int loss, int& money)
+void oScreen(int win, int loss, int& money)
 {
     cout << fixed << setprecision(1) << showpoint;
-    cout << "Game Over" << endl << endl;
-    cout << "Statistics for this game are:" << endl;
+    cout << "\nGame Over" << endl << endl;
+    cout << "Statistics for this game are:" << endl << endl;
     cout << "Total wins = " << win << endl;
     cout << "Total losses = " << loss << endl;
     cout << "Total games = " << win + loss << endl;
@@ -472,7 +474,7 @@ void outputScreen(int win, int loss, int& money)
     cout << "Final score: $" << money << endl;
 }
 
-void compareScore(int pScore, int dScore, int& win, int& loss, int& money, int& gambled)
+void comScor(int pScore, int dScore, int& win, int& loss, int& money, int& gambled)
 {
     //Display the scores of the player and the dealer for comparison
     cout << "\nPlayer = " << pScore << endl;
@@ -507,17 +509,11 @@ void compareScore(int pScore, int dScore, int& win, int& loss, int& money, int& 
     }
 }
 
-void lderBrd(int* points, int money, string* names)
+void lderBrd(int* points, int money, string* names, string data[][COLS], const int ROW)
 {
     //Declare and initialize leaderboards file
     char scores[] = "Leaderboards.dat";
     int count = 0;
-
-    //Open the file
-    //in.open(scores);
-
-    //Read the values
-    //while(in >> points[count++] && count < 5);
     
     string name;  //Save names temporarily into strings
     string score; //Save scores temporarily into strings
@@ -532,7 +528,6 @@ void lderBrd(int* points, int money, string* names)
         names[count] = name;     //Save names into names array
         points[count] = atoi(score.c_str()); //Convert strings into integers and save to points array
         count++; //Increase counter after each loop to completely fill arrays
-        //cout << "Name: " << name << " Score: " << score << endl; //Display names and scores
     }
 
     //Close the file
@@ -542,7 +537,7 @@ void lderBrd(int* points, int money, string* names)
     points[5] = money;
     
     //Call function to sort array for leaderboards
-    sortArray(points, names);
+    srtAray(points, names, data, ROW);
     
     //Declare and initialize output file
     ofstream out;
@@ -554,8 +549,8 @@ void lderBrd(int* points, int money, string* names)
     //Write the names and scores to file and output the leaderboards to screen
     for(int i = 0 ; i < 5; i++)
     {
-        cout << "Name: " << setw(5)<< names[i] << "  Score: $" << points[i] << "\n";
-        out << "Name: " << setw(5)<< names[i] << "  Score: $" << points[i] << "\n";
+        cout << "Name: " << setw(10) << data[i][0] << "  Score: $" << data[i][1] << "\n";
+        out  << data[i][0] << ", " << data[i][1] << "\n";
     }
 
     //Close the file
@@ -563,11 +558,12 @@ void lderBrd(int* points, int money, string* names)
 }
 
 //Use bubble sort to sort array
-void sortArray(int* points, string* names)
+void srtAray(int* points, string* names, string data[][COLS], const int ROW)
 {
     bool swap; 
     int temp; //Temporary variable needed to swap scores
     string sTemp; //Temporary variable to swap names along with scores
+    string score[5] = {};
     
     do
     {
@@ -592,4 +588,14 @@ void sortArray(int* points, string* names)
             }
         }
     } while(swap);
+    
+    //Convert integers to strings
+    for(int i = 0; i < ROW; i++)
+        score[i] = to_string(points[i]);
+    
+    for(int i = 0; i < ROW; i++)
+    {
+        data[i][0] = names[i];
+        data[i][1] = score[i];
+    }
 }
