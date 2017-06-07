@@ -20,12 +20,12 @@ using namespace std; //Name-space under which system libraries exist
 
 //Function Prototypes
 void prob1();
-float calRtail(float, float);
+float calRtal(float, float);
 void prob2();
-float getSale(float);
+float getSale(string);
 void highest(float, float, float, float);
 void prob3();
-int accidnt(int);
+int accidnt(string);
 void lowest(int, int, int, int, int);
 void prob4();
 float falling(float, float, float);
@@ -46,20 +46,17 @@ int main(int argc, char** argv) {
     do
     {
         //Display Menu
-        cout << endl << endl << "Type 0 to exit" << endl;
-        cout << "Type 1 for Sum of Numbers Problem" << endl;
-        cout << "Type 2 for Characters for the ASCII Codes Problem" << endl;
-        cout << "Type 3 for Ocean Levels Problem" << endl;
-        cout << "Type 4 for Calories Burned Problem" << endl;
-        cout << "Type 5 for Membership Fees Increase Problem" << endl;
-        cout << "Type 6 for Distance Traveled Problem" << endl;
-        cout << "Type 7 for Pennies for Pay Problem" << endl;
-        cout << "Type 8 for Math Tutor Problem" << endl;
-        cout << "Type 9 for Check Your Weight Problem" << endl << endl;
+        cout << endl << endl << "Type 1 for Markup Problem" << endl;
+        cout << "Type 2 for Winning Division Problem" << endl;
+        cout << "Type 3 for Safest Driving Area Problem" << endl;
+        cout << "Type 4 for Falling Distance Problem" << endl;
+        cout << "Type 5 for Kinetic Energy Problem" << endl;
+        cout << "Type anything else to exit." << endl;
         
         //Input the choice
         cout << "Problem ";
         cin >> choice;
+        cout << endl;
         
         //Place solutions to problems in switch statement
         switch(choice)
@@ -76,16 +73,10 @@ int main(int argc, char** argv) {
             break;
             case '6': prob6();
             break;
-            case '7': prob7();
-            break;
-            case '8': prob8();
-            break;
-            case '9': prob9();
-            break;
-            case '10': prob10();
-            break;
+            default:
+                cout << "Exit the program" << endl;
         }
-    }while(choice >= '1' && choice <= '9');
+    }while(choice >= '1' && choice <= '5');
     
     //Exit stage right!
     return 0;
@@ -118,12 +109,12 @@ void prob1()
    cout << "Invalid input. Enter a positive number." << endl;
  } while (markup < 0);
  markup = markup / 100.0f;
- price = calRtail(cost, markup);
+ price = calRtal(cost, markup);
  cout << fixed << setprecision(2);
  cout << endl << "The item's retail price is $" << price << endl;
 }
     
-float calRtail(float cost, float markup)
+float calRtal(float cost, float markup)
 {
  float price;
  price = (cost * markup) + cost;
@@ -142,27 +133,26 @@ void prob2()
  float se;
  float nw;
  float sw;
- float name;
- name = 0;
+ string name;
  cout << "This program will determine the highest grossing division from 4 different divisions." << endl << endl;
- cout << endl << "Northeast" << endl;
+ name = "Northeast";
  ne = getSale(name);
- cout << endl << "Southeast" << endl;
+ name = "Southeast";
  se = getSale(name);
- cout << endl << "Northwest" << endl;
+ name = "Northwest";
  nw = getSale(name);
- cout << endl << "Southwest" << endl;
+ name = "Southwest";
  sw = getSale(name);
  highest(ne, se, nw, sw);
 
 }
 
-float getSale(float name)
+float getSale(string name)
 {
  float sales;
  do
  {
-  cout << "Input the division's quarterly sales figure: ";
+  cout << "Input the " << name << " division's quarterly sales figure: ";
   cin >> sales;
   if (sales < 0)
    cout << "Invalid input. Please enter a number greater than or equal to 0." << endl << endl;
@@ -190,34 +180,35 @@ void prob3()
  * Created on May 5th, 2017, 7:30 PM
  * Purpose: Determine safest driving area
  */
+ string name = "North";
  int north;
  int south;
  int east;
  int west;
  int central;
- int name;
- name = 0;
- cout << "This program will determine the highest grossing division from 4 different divisions." << endl << endl;
- cout << endl << "North" << endl;
+ cout << "This program will determine the geographic region that had the fewest "
+         "reported automobile accidents last year." << endl << endl;
+ name = "North";
  north = accidnt(name);
- cout << endl << "South" << endl;
+ name = "South";
  south = accidnt(name);
- cout << endl << "East" << endl;
+ name = "East";
  east = accidnt(name);
- cout << endl << "West" << endl;
+ name = "West";
  west = accidnt(name);
- cout << endl << "Central" << endl;
+ name = "Central";
  central = accidnt(name);
  lowest(north, south, east, west, central);
 
 }
 
-int accidnt(int name)
+int accidnt(string name)
 {
  float accdnts; //Number of automobile accidents reported in region during last year
  do
  {
-  cout << "Input the division's quarterly sales figure: ";
+  cout << "Input the " << name << " region's number of automobile accidents "
+          "reported during the last year: ";
   cin >> accdnts;
   if (accdnts < 0)
    cout << "Invalid input. Please enter a number greater than or equal to 0." << endl << endl;
@@ -227,16 +218,21 @@ int accidnt(int name)
 
 void lowest(int north, int south, int east, int west, int central)
 {
- if (north > south && north > east && north > west && north > central)
-  cout << "\nThe North division is the division with the lowest amount of automobile accidents with a number of " << north << "accidents that occured in the past year." << endl;
- else if (south > north && south > east && south > west && south > central)
-  cout << "\nThe South division is the division with the lowest amount of automobile accidents with a number of " << south << "accidents that occured in the past year." << endl;
- else if (east > south && east > north && east > west && east > central)
-  cout << "\nThe East division is the division with the lowest amount of automobile accidents with a number of " << east << "accidents that occured in the past year." << endl;
- else if (west > south && west > east && west > north && west > central)
-  cout << "\nThe West division is the division with the lowest amount of automobile accidents with a number of " << west << "accidents that occured in the past year." << endl;
+ if (north < south && north < east && north < west && north < central)
+  cout << "\nThe North division is the division with the lowest amount of automobile\n"
+          "accidents with a number of " << north << " accidents that occurred in the past year." << endl;
+ else if (south < north && south < east && south < west && south < central)
+  cout << "\nThe South division is the division with the lowest amount of automobile\n"
+          "accidents with a number of " << south << " accidents that occurred in the past year." << endl;
+ else if (east < south && east < north && east < west && east < central)
+  cout << "\nThe East division is the division with the lowest amount of automobile\n"
+          "accidents with a number of " << east << " accidents that occurred in the past year." << endl;
+ else if (west < south && west < east && west < north && west < central)
+  cout << "\nThe West division is the division with the lowest amount of automobile\n"
+          "accidents with a number of " << west << " accidents that occurred in the past year." << endl;
  else
-  cout << "\nThe Central division is the division with the lowest amount of automobile accidents with a number of " << central << "accidents that occured in the past year." << endl;
+  cout << "\nThe Central division is the division with the lowest amount of automobile\n"
+          "accidents with a number of " << central << " accidents that occurred in the past year." << endl;
 }
 
 void prob4()
@@ -247,16 +243,19 @@ void prob4()
  * Created on May 5th, 2017, 7:46 PM
  * Purpose: Find distance an object falls in a range of time
  */
+    
  float d = 0;          //Distance (in meters) that the object has fallen
  float g = 9.8;  //Distance per second an object falls due to gravity
  float t = 0;          //Time (in seconds) that the object falls
  cout << endl << "This program calculates the distance an object falls during the time range of 1-10 seconds." << endl << endl;
+ cout << "Meters fallen  |  Seconds" << endl;
+ cout << "--------------------------------" << endl;
  for (int i = 1; i <= 10; i++)
  {
   t = i;
   d = falling(d, g, t);
   cout << fixed << setprecision(2);
-  cout << "The object has fallen " << setw(6) << d << " meters in " << t << " seconds." << endl;
+  cout << setw(8) << d << "         " << setw(6) << t << endl;
  }
 }
 
@@ -298,10 +297,11 @@ void prob6()
  /*
  * File:   main.cpp
  * Author: Oscar Sandoval
- * Created on April 18, 2017, 11:31 AM
- * Purpose:
+ * Created on June 6th, 2017, 11:03 PM
+ * Purpose: 
  */
 }
+ 
 
 void prob7()
 {
